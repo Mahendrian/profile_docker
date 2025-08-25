@@ -138,4 +138,289 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', function() {
         updateActiveNavLink();
     });
+
+    // Advanced animations and effects
+    
+    // Parallax scrolling effect
+    function handleParallax() {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.hero-section::before');
+        if (parallax) {
+            const speed = scrolled * 0.5;
+        }
+    }
+    
+    // Mouse follower effect
+    function createMouseFollower() {
+        const cursor = document.createElement('div');
+        cursor.className = 'cursor-follower';
+        document.body.appendChild(cursor);
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        // Add cursor styles
+        const cursorStyles = `
+            .cursor-follower {
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                background: rgba(74, 222, 128, 0.3);
+                border-radius: 50%;
+                pointer-events: none;
+                mix-blend-mode: difference;
+                z-index: 9999;
+                transition: transform 0.1s ease;
+            }
+            
+            .cursor-follower.clicked {
+                transform: scale(0.5);
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = cursorStyles;
+        document.head.appendChild(styleSheet);
+        
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('clicked');
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('clicked');
+        });
+    }
+    
+    // Typing animation for hero title
+    function typewriterEffect(element, text, speed = 100) {
+        let i = 0;
+        element.innerHTML = '';
+        
+        function typeChar() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeChar, speed);
+            }
+        }
+        
+        typeChar();
+    }
+    
+    // Animated counter
+    function animateCounter(element, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            element.innerHTML = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+    
+    // Particle system
+    function createParticleSystem() {
+        const particlesContainer = document.createElement('div');
+        particlesContainer.className = 'particles-container';
+        particlesContainer.innerHTML = `
+            <style>
+                .particles-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                    z-index: -1;
+                    overflow: hidden;
+                }
+                
+                .particle {
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    background: #4ade80;
+                    border-radius: 50%;
+                    opacity: 0.6;
+                }
+                
+                .particle:nth-child(odd) {
+                    background: rgba(74, 222, 128, 0.3);
+                    animation: particle1 15s infinite linear;
+                }
+                
+                .particle:nth-child(even) {
+                    background: rgba(74, 222, 128, 0.5);
+                    animation: particle2 20s infinite linear;
+                }
+            </style>
+        `;
+        
+        document.body.appendChild(particlesContainer);
+        
+        // Create particles
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    }
+    
+    // Magnetic effect for buttons
+    function addMagneticEffect() {
+        const magneticElements = document.querySelectorAll('.cta-button, .nav-link, .social-link');
+        
+        magneticElements.forEach(element => {
+            element.addEventListener('mousemove', (e) => {
+                const { offsetX, offsetY } = e;
+                const { offsetWidth, offsetHeight } = element;
+                
+                const centerX = offsetWidth / 2;
+                const centerY = offsetHeight / 2;
+                
+                const deltaX = (offsetX - centerX) / centerX;
+                const deltaY = (offsetY - centerY) / centerY;
+                
+                element.style.transform = `translate(${deltaX * 10}px, ${deltaY * 10}px) scale(1.05)`;
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'translate(0px, 0px) scale(1)';
+            });
+        });
+    }
+    
+    // Text reveal animation
+    function revealTextOnScroll() {
+        const textElements = document.querySelectorAll('h1, h2, p');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('text-reveal');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        textElements.forEach(element => {
+            revealObserver.observe(element);
+        });
+        
+        // Add text reveal styles
+        const textRevealStyles = `
+            h1, h2, p {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            
+            .text-reveal {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = textRevealStyles;
+        document.head.appendChild(styleSheet);
+    }
+    
+    // Company logos stagger animation
+    function staggerCompanyLogos() {
+        const logos = document.querySelectorAll('.company-logo');
+        
+        logos.forEach((logo, index) => {
+            logo.style.setProperty('--i', index);
+            logo.style.opacity = '0';
+            logo.style.transform = 'translateY(20px)';
+            logo.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            logo.style.transitionDelay = (index * 0.1) + 's';
+        });
+        
+        const logoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const logos = entry.target.querySelectorAll('.company-logo');
+                    logos.forEach(logo => {
+                        logo.style.opacity = '1';
+                        logo.style.transform = 'translateY(0)';
+                    });
+                }
+            });
+        });
+        
+        const companiesSection = document.querySelector('.companies-section');
+        if (companiesSection) {
+            logoObserver.observe(companiesSection);
+        }
+    }
+    
+    // Smooth page transitions
+    function addPageTransitions() {
+        // Add page transition overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'page-transition-overlay';
+        overlay.innerHTML = `
+            <style>
+                .page-transition-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+                    z-index: 9999;
+                    opacity: 1;
+                    transition: opacity 0.5s ease;
+                    pointer-events: none;
+                }
+                
+                .page-transition-overlay.hidden {
+                    opacity: 0;
+                }
+            </style>
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        // Hide overlay after page load
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            setTimeout(() => {
+                overlay.remove();
+            }, 500);
+        }, 100);
+    }
+    
+    // Initialize all advanced features
+    function initAdvancedAnimations() {
+        // Only run on devices that can handle animations
+        if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            createMouseFollower();
+            createParticleSystem();
+        }
+        
+        addMagneticEffect();
+        revealTextOnScroll();
+        staggerCompanyLogos();
+        addPageTransitions();
+        
+        // Add parallax scrolling
+        window.addEventListener('scroll', handleParallax);
+    }
+    
+    // Start advanced animations after a delay
+    setTimeout(initAdvancedAnimations, 500);
 });
