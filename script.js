@@ -421,6 +421,168 @@ document.addEventListener('DOMContentLoaded', function() {
         window.addEventListener('scroll', handleParallax);
     }
     
+    // Enhanced profile avatar interactions
+    function enhanceProfileAvatar() {
+        const profileImage = document.querySelector('.profile-image');
+        
+        if (profileImage) {
+            // Create multiple spirit layers
+            for (let i = 0; i < 3; i++) {
+                const spiritLayer = document.createElement('div');
+                spiritLayer.className = `spirit-layer spirit-layer-${i}`;
+                profileImage.appendChild(spiritLayer);
+            }
+            
+            // Add spirit layer styles
+            const spiritStyles = `
+                .spirit-layer {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 120%;
+                    height: 120%;
+                    border-radius: 50%;
+                    pointer-events: none;
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0.8);
+                    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: -1;
+                }
+                
+                .spirit-layer-0 {
+                    background: radial-gradient(circle, rgba(74, 222, 128, 0.4) 0%, rgba(74, 222, 128, 0.1) 60%, transparent 100%);
+                    animation: spiritPulse 2s ease-in-out infinite;
+                }
+                
+                .spirit-layer-1 {
+                    background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, rgba(74, 222, 128, 0.1) 70%, transparent 100%);
+                    animation: spiritPulse 2.5s ease-in-out infinite reverse;
+                    width: 140%;
+                    height: 140%;
+                }
+                
+                .spirit-layer-2 {
+                    background: radial-gradient(circle, rgba(74, 222, 128, 0.2) 0%, rgba(34, 197, 94, 0.05) 80%, transparent 100%);
+                    animation: spiritPulse 3s ease-in-out infinite;
+                    width: 160%;
+                    height: 160%;
+                }
+                
+                @keyframes spiritPulse {
+                    0%, 100% {
+                        transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+                        opacity: 0.3;
+                    }
+                    50% {
+                        transform: translate(-50%, -50%) scale(1.1) rotate(180deg);
+                        opacity: 0.7;
+                    }
+                }
+                
+                .profile-image:hover .spirit-layer {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1.2);
+                }
+                
+                .profile-image:hover .spirit-layer-0 {
+                    animation-play-state: running;
+                }
+                
+                .profile-image:hover .spirit-layer-1 {
+                    animation-play-state: running;
+                    transform: translate(-50%, -50%) scale(1.3);
+                }
+                
+                .profile-image:hover .spirit-layer-2 {
+                    animation-play-state: running;
+                    transform: translate(-50%, -50%) scale(1.4);
+                }
+            `;
+            
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = spiritStyles;
+            document.head.appendChild(styleSheet);
+            
+            // Mouse movement interaction
+            profileImage.addEventListener('mousemove', (e) => {
+                const rect = profileImage.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                const rotateX = (y / rect.height) * 20;
+                const rotateY = (x / rect.width) * -20;
+                
+                profileImage.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                
+                // Update spirit layers based on mouse position
+                const spiritLayers = profileImage.querySelectorAll('.spirit-layer');
+                spiritLayers.forEach((layer, index) => {
+                    const intensity = (index + 1) * 0.3;
+                    layer.style.transform = `translate(${-50 + (x / rect.width) * intensity * 10}%, ${-50 + (y / rect.height) * intensity * 10}%) scale(${1.2 + intensity * 0.2}) rotate(${(x + y) * intensity}deg)`;
+                });
+            });
+            
+            profileImage.addEventListener('mouseleave', () => {
+                profileImage.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+                
+                const spiritLayers = profileImage.querySelectorAll('.spirit-layer');
+                spiritLayers.forEach((layer, index) => {
+                    const baseScale = 0.8 + (index * 0.1);
+                    layer.style.transform = `translate(-50%, -50%) scale(${baseScale}) rotate(0deg)`;
+                });
+            });
+            
+            // Click effect
+            profileImage.addEventListener('click', () => {
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.className = 'profile-ripple';
+                profileImage.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000);
+            });
+            
+            // Add ripple styles
+            const rippleStyles = `
+                .profile-ripple {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 0;
+                    height: 0;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(74, 222, 128, 0.6) 0%, rgba(74, 222, 128, 0.1) 70%, transparent 100%);
+                    transform: translate(-50%, -50%);
+                    animation: rippleEffect 1s ease-out;
+                    pointer-events: none;
+                    z-index: 10;
+                }
+                
+                @keyframes rippleEffect {
+                    0% {
+                        width: 0;
+                        height: 0;
+                        opacity: 1;
+                    }
+                    100% {
+                        width: 200%;
+                        height: 200%;
+                        opacity: 0;
+                    }
+                }
+            `;
+            
+            const rippleStyleSheet = document.createElement('style');
+            rippleStyleSheet.textContent = rippleStyles;
+            document.head.appendChild(rippleStyleSheet);
+        }
+    }
+    
     // Start advanced animations after a delay
-    setTimeout(initAdvancedAnimations, 500);
+    setTimeout(() => {
+        initAdvancedAnimations();
+        enhanceProfileAvatar();
+    }, 500);
 });
