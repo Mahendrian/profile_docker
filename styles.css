@@ -211,9 +211,65 @@ body {
     z-index: 1;
 }
 
-.profile-image:hover img {
+.profile-image:hover .main-profile-img {
     transform: scale(1.05);
     filter: brightness(1.1) contrast(1.1);
+    opacity: 0.7;
+}
+
+/* Avatar background styling */
+.avatar-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(1.2) rotate(-10deg);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px) brightness(1.3) contrast(1.2) hue-rotate(120deg);
+    transform: scale(1.1);
+    transition: all 0.6s ease;
+}
+
+.main-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+}
+
+.profile-image:hover .avatar-background {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+}
+
+.profile-image:hover .avatar-img {
+    filter: blur(1px) brightness(1.5) contrast(1.3) hue-rotate(120deg) saturate(1.5);
+    transform: scale(1.15) rotate(-5deg);
+    animation: avatarPulse 2s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+    0%, 100% {
+        filter: blur(1px) brightness(1.5) contrast(1.3) hue-rotate(120deg) saturate(1.5);
+        transform: scale(1.15) rotate(-5deg);
+    }
+    50% {
+        filter: blur(0.5px) brightness(1.7) contrast(1.4) hue-rotate(140deg) saturate(1.8);
+        transform: scale(1.2) rotate(0deg);
+    }
 }
 
 @keyframes spiritRotate {
