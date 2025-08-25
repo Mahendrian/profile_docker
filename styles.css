@@ -731,6 +731,31 @@ html {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShift 3s ease-in-out infinite;
+    position: relative;
+}
+
+/* Waving hand emoji animation */
+.hero-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -60px;
+    font-size: 3.5rem;
+    display: inline-block;
+    animation: wave 2s ease-in-out infinite;
+    transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: rotate(-10deg);
+    }
+    20%, 40%, 60%, 80% {
+        transform: rotate(12deg);
+    }
 }
 
 @keyframes gradientShift {
