@@ -1,6 +1,17 @@
-# Portfolio Website
+# Hi there, I'm Mahendran! 👋
 
-A modern, responsive portfolio website built with HTML, CSS, and JavaScript.
+Welcome to my portfolio repository! I'm a passionate developer who loves creating modern, responsive web experiences.
+
+## About Me
+
+- 💻 I build clean, efficient, and user-friendly web applications
+- 🎨 I have an eye for design and enjoy creating beautiful user interfaces
+- 🚀 I'm always learning new technologies and staying up-to-date with industry trends
+- 📱 I focus on responsive design to ensure great experiences across all devices
+
+## Portfolio Website
+
+This repository contains my personal portfolio website - a modern, responsive site built with HTML, CSS, and JavaScript.
 
 ## Features
 
